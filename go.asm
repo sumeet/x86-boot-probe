@@ -219,7 +219,7 @@ LongMode:
 
 	mov rsi, 1337
 	mov rdi, print_buf
-	call bwritei
+	call writei
 
 	mov rsi, print_buf
 	mov rdi, 0x1F
@@ -231,11 +231,11 @@ halt:
 msg: db "hello", 13, 10, 0
 msg2: db "set up page tables", 13, 10, 0
 msg3: db "entered compatibility mode", 13, 10, 0
-msg4: db "we're in x86_64", 13, 10, "next line", 13, 10, 0
+msg4: db "we're in x86_64 ", 0
 cursor: dd 0xb8000
 print_buf: times 512 db 0
 
-bwritei:
+writei:
         mov     rax, rsi
         mov     ecx, 10
 .L2:
