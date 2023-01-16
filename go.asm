@@ -236,19 +236,37 @@ cursor: dd 0xb8000
 print_buf: times 512 db 0
 
 writei:
+        mov     rcx, rdi
         mov     rax, rsi
-        mov     ecx, 10
+        mov     edi, 10
+        xor     esi, esi
 .L2:
         test    rax, rax
-        jle     .L5
+        jle     .L7
         cqo
-        inc     rdi
-        idiv    rcx
+        idiv    rdi
         add     edx, 48
-        mov     BYTE [rdi-1], dl
+        mov     BYTE [rcx+rsi], dl
+        inc     rsi
         jmp     .L2
-.L5:
-        mov     BYTE [rdi], 0
+.L7:
+        mov     rdx, rsi
+        mov     rdi, rsi
+        sub     rdx, rax
+        shr     rdi, 1
+        add     rdx, rcx
+.L4:
+        dec     rdx
+        cmp     rax, rdi
+        jnb     .L8
+        mov     r8b, BYTE [rcx+rax]
+        mov     r9b, BYTE [rdx]
+        mov     BYTE [rcx+rax], r9b
+        inc     rax
+        mov     BYTE [rdx], r8b
+        jmp     .L4
+.L8:
+        mov     BYTE [rcx+rsi], 0
         ret
 
 write_string:
